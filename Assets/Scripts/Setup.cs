@@ -5,19 +5,27 @@ using UnityEngine.UI;
 
 namespace MosMos
 {
+    /// <summary>
+    /// Main game class
+    /// </summary>
     public class Setup : MonoBehaviour
     {
         [SerializeField, Tooltip("List of shop items")] private List<DataBonus> _allBonuses;
         [SerializeField, Tooltip("ScoreText - link")] private Text _scoreText;
         [SerializeField, Tooltip("ShopPanel - link")] private GameObject _shoppanel;
+        [SerializeField] private AudioData _audioData = new AudioData();
 
         private Score _score = new Score();
         private SaveData _save = new SaveData();
         private XMLData _xmlData;
 
+
+
+
         private void Awake()
         {
             _xmlData = new XMLData();
+            _audioData.AudioDataInit();
 
             if (File.Exists(_xmlData.SaveLoadPath))
             {
@@ -51,6 +59,9 @@ namespace MosMos
             PassiveСalculate();
         }
 
+
+
+
         #region OnClick Methods
         /// <summary>
         /// 'OnTap' - method
@@ -60,6 +71,7 @@ namespace MosMos
             _score.PropScore += _score.ActiveBonusLvl;
             if (_scoreText != null)
                 _scoreText.text = _score + "$";
+            _audioData.Audios[0].Play();
         }
         /// <summary>
         /// On\Off ShopPanel
@@ -67,6 +79,7 @@ namespace MosMos
         public void ShopBttn()
         {
             _shoppanel.SetActive(!_shoppanel.activeSelf);
+            _audioData.Audios[2].Play();
         }
         /// <summary>
         /// 'Push The Button' - method
@@ -81,6 +94,7 @@ namespace MosMos
                     bonus.Do();
                 }
             }
+            _audioData.Audios[1].Play();
         }
 
         #endregion
